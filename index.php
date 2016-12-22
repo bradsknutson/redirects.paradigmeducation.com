@@ -1,8 +1,6 @@
 <?php
 
     require 'conn.php';
-
-    $default = 'http://paradigmeducation.com';
     $redirect = $_GET['redir'];
 
     $url = $_SERVER['HTTP_HOST'];
@@ -29,6 +27,30 @@
         echo '<br />';
         
     }
+
+    $base = "SELECT b.default_url
+                    FROM book b, root_domains c, sub_domains d
+                    WHERE c.id = b.domain_id
+                    AND d.id = b.sub_id
+                    AND c.domain = '". $domain ."'
+                    AND d.sub = '". $sub_domain ."'";
+
+    $default_url_result = $mysqli->query($base);
+    $default_url_count = $default_url_result->num_rows;
+
+    if( $default_url_count > 0 ) {
+        
+        $default_url_row = $default_url_result->fetch_array();
+        $default_url_result->close();
+        
+        $default = $default_url_row['default_url'];
+        
+    } else {
+        
+        $default = 'http://paradigmeducation.com';
+        
+    }
+
 
     /***************************************************/
     /******************MATCH REDIRECT*******************/
