@@ -1,7 +1,7 @@
 <?php
 
     require 'conn.php';
-    $redirect = $_GET['redir'];
+    $redirect = $mysqli->real_escape_string( $_GET['redir'] );
 
     $url = $_SERVER['HTTP_HOST'];
         
